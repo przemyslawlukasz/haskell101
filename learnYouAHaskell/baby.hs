@@ -2,6 +2,8 @@ import Data.Maybe
 import Data.List
 -- import Data.Function
 import Data.Char
+import qualified Data.Map as Map 
+import qualified Data.Set as Set
 
 doubleUs x y = doubleMe x + doubleMe y
 
@@ -299,6 +301,20 @@ encode n txt = map (\c -> chr $ c + n) $ map ord txt
 decode :: Int -> String -> String
 decode n txt = encode (-n) txt
 
+-- findKey :: (Eq k) => k -> [(k,v)] -> v
+-- findKey key xs = snd . head . filter (\(k,v) -> key == k) $ xs
+
+-- findKey' :: (Eq k) => k -> [(k,v)] -> Maybe v
+-- findKey' _ [] = Nothing
+-- findKey' key ((k,v):xs) = if k == key 
+--                                then Just v
+--                                else findKey' key xs
+
+findKey :: (Eq k) => k -> [(k,v)] -> Maybe v
+findKey key = foldl (\acc (k,v) -> if key == k then Just v else acc) Nothing
+
+fromList :: (Ord k) => [(k,v)] -> Map.Map k v
+fromList = foldl (\acc (k,v) -> Map.insert k v acc) Map.empty
 
 infixr 5 :-:  
 data List a = Empty | a :-: (List a) deriving (Show, Read, Eq, Ord)
